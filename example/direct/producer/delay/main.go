@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	rocketmq_client "rocketmq_client/src"
+	"rocketmq_client"
 	"time"
 )
 

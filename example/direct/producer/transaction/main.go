@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	rmq_client "github.com/apache/rocketmq-clients/golang/v5"
-	rocketmq_client "rocketmq_client/src"
+	"rocketmq_client"
 )
 
 const (
