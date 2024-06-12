@@ -1,8 +1,11 @@
 package rocketmq_client
 
 import (
+	"errors"
 	rmq_client "github.com/apache/rocketmq-clients/golang/v5"
 	"github.com/apache/rocketmq-clients/golang/v5/credentials"
+	"os"
+	"strings"
 )
 
 type Config struct {
@@ -15,6 +18,28 @@ type Config struct {
 	LogStdout        bool             //是否在终端输出官方rocketmq日志，输出的话则不会记录日志文件
 	Debug            bool             //是否在终端输出本客户端的debug信息
 	DebugHandlerFunc debugHandlerFunc //本客户端的debug信息处理方法，不管debug开没开，有debug信息的时候都会调用
+}
+
+func checkCfg(cfg *Config) error {
+	if cfg.LogStdout {
+		os.Setenv("mq.consoleAppender.enabled", "true")
+	} else {
+		os.Setenv("mq.consoleAppender.enabled", "false")
+	}
+	if strings.Trim(cfg.LogPath, "") == "" {
+		cfg.LogPath = "/tmp"
+	}
+	os.Setenv("rocketmq.client.logRoot", cfg.LogPath)
+	rmq_client.ResetLogger()
+
+	if strings.Trim(cfg.Endpoint, "") == "" {
+		return errors.New("Endpoint不能为空")
+	}
+
+	if strings.Trim(cfg.NameSpace, "") == "" {
+		return errors.New("NameSpace不能为空")
+	}
+	return nil
 }
 
 func getRmqCfg(cfg *Config) *rmq_client.Config {

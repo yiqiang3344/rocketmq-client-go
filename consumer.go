@@ -68,10 +68,15 @@ func (s defaultConsumer) ChangeInvisibleDurationAsync(invisibleDuration time.Dur
 // ConsumeFunc 消费方法
 // 方法内消费成功时需要调用consumer.Ack()；
 // 消费时间可能超过消费者MaxMessageNum设置的时间时，可调用consumer.ChangeInvisibleDuration()或consumer.ChangeInvisibleDurationAsync()方法调整消息消费超时时间；
-type ConsumeFunc func(ctx context.Context, msg *rmq_client.MessageView, consumer Consumer)
+type ConsumeFunc func(ctx context.Context, msg *rmq_client.MessageView, consumer Consumer) error
 
 // SimpleConsume 简单消费类型消费
 func SimpleConsume(ctx context.Context, cfg *Config, consumeFunc ConsumeFunc, oFunc ...ConsumerOptionFunc) (stopFunc func(), err error) {
+	err = checkCfg(cfg)
+	if err != nil {
+		return
+	}
+
 	o := ConsumerOptions{
 		AwaitDuration:     time.Second * 5,
 		MaxMessageNum:     10,

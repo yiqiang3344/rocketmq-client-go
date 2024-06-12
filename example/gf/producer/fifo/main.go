@@ -1,25 +1,58 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/gogf/gf/contrib/trace/otlpgrpc/v2"
+	"github.com/gogf/gf/v2/net/gtrace"
+	"github.com/gogf/gf/v2/os/gctx"
+	"go.opentelemetry.io/otel/codes"
 	"rocketmq_client"
 )
 
 const (
-	Endpoint     = "127.0.0.1:18081"
-	NameSpace    = "test"
-	AccessKey    = ""
-	AccessSecret = ""
+	OtlpAppName    = "rocketmqClientTest"
+	OtlpEndpoint   = "tracing-analysis-dc-bj.aliyuncs.com:8090"
+	OtlpTraceToken = "xxxx_xxxx"
+	Endpoint       = "127.0.0.1:18081"
+	NameSpace      = "test"
+	AccessKey      = ""
+	AccessSecret   = ""
 	// ./bin/mqadmin updateTopic -n 127.0.0.1:9876 -t test_fifo_demo -c DefaultCluster -a +message.type=FIFO
 	Topic        = "test_fifo_demo"
 	MessageGroup = "messagegroup1"
 )
 
 func main() {
-	var ctx = context.Background()
-	producer, err := rocketmq_client.GetProducer(
+	var ctx = gctx.GetInitCtx()
+
+	// 链路追踪初始化
+	shutdown, err := otlpgrpc.Init(
+		OtlpAppName,
+		OtlpEndpoint,
+		OtlpTraceToken,
+	)
+	if err != nil {
+		panic(err)
+	}
+	defer shutdown()
+
+	fmt.Printf("tranceId:%s\n", gctx.CtxId(ctx))
+
+	ctx, span := gtrace.NewSpan(ctx, "gfRocketmqProducerExample")
+	defer func() {
+		if e := recover(); e != nil {
+			span.SetStatus(codes.Error, e.(error).Error())
+			span.End()
+			panic(e)
+		} else {
+			span.SetStatus(codes.Ok, "")
+			span.End()
+		}
+		fmt.Println("span[gfRocketmqProducerExample] end")
+	}()
+
+	producer, err := rocketmq_client.GetGfProducer(
 		&rocketmq_client.Config{
 			Endpoint:     Endpoint,
 			NameSpace:    NameSpace,
