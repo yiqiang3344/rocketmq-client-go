@@ -81,6 +81,9 @@ func addSendTrace(ctx context.Context, msg *Message) (context.Context, func(resp
 
 	//给消息设置链路信息
 	spanContext := trace.SpanContextFromContext(ctx)
+	if msg.Properties == nil {
+		msg.Properties = map[string]string{}
+	}
 	msg.Properties["traceId"] = spanContext.TraceID().String()
 	msg.Properties["spanId"] = spanContext.SpanID().String()
 
