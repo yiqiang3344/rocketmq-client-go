@@ -13,9 +13,12 @@ const (
 	NameSpace    = "test"
 	AccessKey    = ""
 	AccessSecret = ""
-	Topic        = "test_normal_demo"
-	// ./bin/mqadmin updateSubGroup -n 127.0.0.1:9876 -c cg_test_normal_demo -c DefaultCluster -o true
-	ConsumerGroup = "cg_test_normal_demo"
+	Topic1       = "test_normal_demo"
+	Topic2       = "test_fifo_demo"
+	Topic3       = "test_delay_demo"
+	Topic4       = "test_transaction_demo"
+	// ./bin/mqadmin updateSubGroup -n 127.0.0.1:9876 -c cg_test_demo -c DefaultCluster -o true
+	ConsumerGroup = "cg_test_demo"
 )
 
 func main() {
@@ -26,7 +29,7 @@ func main() {
 		ConsumerGroup: ConsumerGroup, //必填
 		AccessKey:     AccessKey,
 		AccessSecret:  AccessSecret,
-		LogStdout:     true,
+		LogStdout:     false,
 		Debug:         true,
 	})
 	if err != nil {
@@ -44,7 +47,10 @@ func main() {
 			return
 		},
 		rocketmq_client.WithConsumerOptionSubExpressions(map[string]*rmq_client.FilterExpression{
-			Topic: rmq_client.SUB_ALL,
+			Topic1: rmq_client.SUB_ALL,
+			Topic2: rmq_client.SUB_ALL,
+			Topic3: rmq_client.SUB_ALL,
+			Topic4: rmq_client.SUB_ALL,
 		}),
 		rocketmq_client.WithConsumerOptionAwaitDuration(5*time.Second),
 		rocketmq_client.WithConsumerOptionMaxMessageNum(5),
@@ -54,5 +60,5 @@ func main() {
 		panic(err)
 	}
 	defer stopFunc()
-	time.Sleep(time.Minute)
+	time.Sleep(5 * time.Minute)
 }

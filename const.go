@@ -4,8 +4,8 @@ package rocketmq_client
 type TopicType string
 
 const (
-	TopicNormal      TopicType = "Normal"
+	TopicNormal      TopicType = "NORMAL"
 	TopicFIFO        TopicType = "FIFO"
-	TopicDelay       TopicType = "Delay"
-	TopicTransaction TopicType = "Transaction"
+	TopicDelay       TopicType = "DELAY"
+	TopicTransaction TopicType = "TRANSACTION"
 )

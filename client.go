@@ -24,6 +24,9 @@ func GetClient(cfg *Config) (client Client, err error) {
 	} else {
 		os.Setenv("mq.consoleAppender.enabled", "false")
 	}
+	if strings.Trim(cfg.LogPath, "") == "" {
+		cfg.LogPath = "/tmp"
+	}
 	os.Setenv("rocketmq.client.logRoot", cfg.LogPath)
 	rmq_client.ResetLogger()
 

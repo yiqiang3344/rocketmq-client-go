@@ -44,9 +44,9 @@ func main() {
 			ctx,
 			rocketmq_client.TopicDelay,
 			rocketmq_client.Message{
-				Body:              fmt.Sprintf("msg%d", i),         //必填
-				Topic:             Topic,                           //必填
-				DeliveryTimestamp: time.Now().Add(1 * time.Minute), //必填
+				Body:              fmt.Sprintf("%smsg%d", rocketmq_client.TopicDelay, i), //必填
+				Topic:             Topic,                                                 //必填
+				DeliveryTimestamp: time.Now().Add(10 * time.Second),                      //必填
 				Tag:               "test_delay",
 				Keys:              []string{"test_delay"},
 				Properties: map[string]string{

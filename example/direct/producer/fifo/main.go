@@ -41,9 +41,9 @@ func main() {
 	defer client.StopProducer()
 	for i := 1; i <= 5; i++ {
 		resp, err := client.Send(ctx, rocketmq_client.TopicFIFO, rocketmq_client.Message{
-			Body:         fmt.Sprintf("msg%d", i), //必填
-			Topic:        Topic,                   //必填
-			MessageGroup: MessageGroup,            //必填
+			Body:         fmt.Sprintf("%smsg%d", rocketmq_client.TopicFIFO, i), //必填
+			Topic:        Topic,                                                //必填
+			MessageGroup: MessageGroup,                                         //必填
 			Tag:          "test_fifo",
 			Keys:         []string{"test_fifo"},
 			Properties: map[string]string{

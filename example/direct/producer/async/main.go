@@ -45,8 +45,8 @@ func main() {
 			ctx,
 			rocketmq_client.TopicNormal,
 			rocketmq_client.Message{
-				Body:  fmt.Sprintf("msg%d", i), //必填
-				Topic: Topic,                   //必填
+				Body:  fmt.Sprintf("%smsg%d", rocketmq_client.TopicNormal, i), //必填
+				Topic: Topic,                                                  //必填
 				Tag:   "test_normal_async",
 				Keys:  []string{"test_normal_async"},
 				Properties: map[string]string{
