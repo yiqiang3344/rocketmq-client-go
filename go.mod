@@ -1,4 +1,4 @@
-module rocketmq_client
+module github.com/yiqiang3344/rocketmq-client-go
 
 go 1.21
 
