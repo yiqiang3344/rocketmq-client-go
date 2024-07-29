@@ -68,6 +68,10 @@ func initMsg(ctx context.Context, cfg *Config, topicType TopicType, message Mess
 			msg.AddProperty(k, v)
 		}
 	}
+	//开启了流浪染色功能则设置flowColor
+	if cfg.FlowColor != nil {
+		msg.AddProperty(FlowColor, *cfg.FlowColor)
+	}
 	//设置延迟时间（只有Delay类型topic可用）
 	if topicType == TopicDelay && !message.DeliveryTimestamp.IsZero() {
 		msg.SetDelayTimestamp(message.DeliveryTimestamp)

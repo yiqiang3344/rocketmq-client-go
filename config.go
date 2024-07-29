@@ -18,6 +18,8 @@ type Config struct {
 	LogStdout        bool             //是否在终端输出官方rocketmq日志，输出的话则不会记录日志文件
 	Debug            bool             //是否在终端输出本客户端的debug信息
 	DebugHandlerFunc debugHandlerFunc //本客户端的debug信息处理方法，不管debug开没开，有debug信息的时候都会调用
+	FlowColor        *string          //流量染色标识，为nil则表示不启用流量染色功能，生产者时表示流量染色标识，消费者时表示当前系统的染色标识
+	FlowColorBase    *bool            //当前环境是否是基准环境，消费者使用，为nil则忽略，是基准系统时，可以匹配流量标识为空字符串的消息
 }
 
 func checkCfg(cfg *Config) error {

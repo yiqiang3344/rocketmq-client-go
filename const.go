@@ -8,4 +8,6 @@ const (
 	TopicFIFO        TopicType = "FIFO"
 	TopicDelay       TopicType = "DELAY"
 	TopicTransaction TopicType = "TRANSACTION"
+
+	FlowColor = "FlowColor"
 )
